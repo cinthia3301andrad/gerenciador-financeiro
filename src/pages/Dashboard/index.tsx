@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import AccountBox from '../../components/accountBox';
+import React from 'react'
+import DespesasControl from '../../components/DespesasControl'
+import Header from '../../components/Header'
 
-
-
-import {db} from '../../firebase'
-import { DashboardContainer } from './styles';
+import {NavContainer, DashboardContainer, MainContainer, SidebarHeader, SectionContainer} from './styles'
 const Dashboard: React.FC = () => {
-  const initialState = {
-    url: "noe",
-    name:"ueaue",
-    description: "aduaufu",
-  }
-  const [name, setName] = useState(initialState);
-   const handleEnviar = async() => {
-     await db.collection("teste").doc().set(initialState)
-    console.log("add taks")
-
-    
-  }
-  useEffect(() => {
-     db.collection("teste").doc().set(initialState)
-    console.log("add taks")
-  }, [])
   return (
-    <DashboardContainer>
-      <AccountBox/>
+  <DashboardContainer>
+    <Header/>
+    <MainContainer>
+      <NavContainer>
+        <SidebarHeader>
+          <h2>Usuário</h2>
+          
+        </SidebarHeader>
+        
+      </NavContainer>
+      <SectionContainer>
+        <DespesasControl/>
+      </SectionContainer>
 
-    </DashboardContainer>
-  )
-   
+     
+    </MainContainer>
+  </DashboardContainer>
+  
+  
+    )
 
 }
 

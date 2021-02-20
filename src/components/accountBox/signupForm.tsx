@@ -1,6 +1,12 @@
 import React, { useContext, useCallback } from "react";
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {withRouter} from 'react-router-dom';
 import {authConfig} from '../../firebase';
+
+
 
 import {
   BoldLink,
@@ -11,7 +17,9 @@ import {
   SubmitButton,
 } from "./styledCommon";
 import { Marginer } from "./marginer";
- import { AccountContext } from "./accountContext";
+import { AccountContext } from "./accountContext";
+
+ toast.configure();
 
 export const SignupForm = withRouter((props: any) =>  {
   const {history} = props;
@@ -22,17 +30,36 @@ export const SignupForm = withRouter((props: any) =>  {
       event.preventDefault();
 
       const { email, password } = event.target.elements;
-      //  console.log(event.target.elements.password.value)
+
       try {
         await authConfig
           .auth()
           .createUserWithEmailAndPassword(email.value, password.value);
-        history.push('/teste');
+        history.push('/dashboard');
       } catch (error) {
-        console.log(error);
-        alert('Algo deu errado. O campo de e-mail e senha está preenchido?');
+      
+        var errorCode = error.code;
+        if(errorCode === "auth/email-already-in-use") {
+          toast.warn('Ops, email já cadastrado!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
       }
-    }
+      toast.error('Ops, ocorreu um erro com os dados!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    } }
     ,
     [history],
   );

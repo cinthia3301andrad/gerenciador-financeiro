@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 
-export const DespesasContainer = styled.section`
+export const ReceitasContainer = styled.section`
   width: 70%;
   height: 70%;
   max-height: 700px;
@@ -29,7 +29,7 @@ export const DespesasContainer = styled.section`
   .header-title {
     display: flex;
     justify-content: space-between;
-    background: #dc3545;
+    background: #20c997;;
     align-items: center;
     border-radius:15px;
     padding: 5px 10px;

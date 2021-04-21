@@ -44,12 +44,66 @@ export const SectionContainer = styled.section`
 export const SidebarHeader = styled.aside`
   display: flex;
   flex-direction: column;
-  padding: 30px 25px;
+  padding: 0px 5px;
+
+  .online {
+    display: flex;
+    margin: 5px 0 0 10px;
+  }
+  .sidebar-header {
+    padding: 30px 25px;
+  }
 
   h2 {
     font-size: 1.1rem;
     font-weight: 500;
     color: #6c757d;
+  }
+  h3 {
+    font-size: 0.7rem;
+    margin: 0 0 0 10px;
+    font-weight: 500;
+    color: #6c757d;
+  }
+  .sidebar-general {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 0 0 0;
+   
+    width: 100%;
+   
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+
+  }
+  li {
+    border-radius: 0 10px 10px 0;
+    text-transform: capitalize;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+   
+    list-style:none;
+    padding: 0 0 0 10px;
+   
+    &:hover { 
+      background: rgba(58,	200,	191, 0.1);
+      cursor: pointer;
+    }
+
+    p {
+      font-family: Poppins;
+      font-size: 1.1rem;
+      color: #081439;
+      margin: 0 0 0 7px;
+    }
   }
 
   

@@ -3,7 +3,7 @@ import React, { useCallback, useContext } from "react";
 import { Marginer } from "./marginer";
 import { AccountContext } from "./accountContext";
 import { Redirect, withRouter } from "react-router-dom";
-import {authConfig} from '../../firebase';
+import {authConfig, db} from '../../firebase';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +23,16 @@ toast.configure();
   const { switchToSignup } = useContext(AccountContext);
 
   const {history} = props;
+  var usersCollectionRef = db.doc('despesas/AKldb5td2Hn4qjsWd7Nc');
+
+  async function addUser(u: any)  {
+    await db.collection('users').doc(u.email).set({
+      email: u.email,
+      reference: usersCollectionRef,
+      salario: 0,
+ 
+    }, {merge: true})
+  }
 
 
   const loginHandler = useCallback(
@@ -34,7 +44,9 @@ toast.configure();
         await authConfig
           .auth()
           .signInWithEmailAndPassword(email.value, password.value);
-        history.push('/dashboard');
+        history.push('/dashboard')
+
+        ;
       } catch (error) {
         var errorCode = error.code;
         console.log(errorCode)
@@ -79,8 +91,14 @@ toast.configure();
   );
   const { user } = useContext(AuthContext);
   if (user) {
+    addUser(user);
     return <Redirect to="/dashboard" />;
-  }
+    
+   
+  } 
+ 
+
+  console.log(user)
  
   return (
     <BoxContainer>

@@ -1,40 +1,51 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../../auth/AuthContext';
 
-import { db} from '../../firebase';
-
-import { DespesasContainer, Form } from './styles'
+import {db} from '../../firebase';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { ReceitasContainer, Form } from './styles'
+import { AuthContext } from '../../auth/AuthContext';
+
+
 toast.configure();
 
 interface ReceitasProps {
-  setDespesas(bool: any): void;
-  despesas: number;
+  setCurrentBalance(bool: any): void;
+  currentBalance: number;
   setReceitas(bool: any): void;
+  salary: number;
   receitas: number;
- 
+
+
 }
 
-const DespesasControl: React.FC<ReceitasProps> = ({receitas,setReceitas, despesas,setDespesas}) => {
-  const { user } = useContext(AuthContext);
-  const[despesasControll, setDespesasControll] = useState(despesas);
 
-  async function handleAddDespesas(event: any) {
+
+const ReceitasControl: React.FC<ReceitasProps> = ({setReceitas, receitas, salary, currentBalance, setCurrentBalance}) => {
+  const { user } = useContext(AuthContext);
+
+  const[salaryControll, setSalaryControll] = useState(receitas);
+
+
+
+
+  async function handleAddReceitas(event: any) {
      event.preventDefault();
     const { nome, valor, categoria, data, descricao } = event.target.elements;
 
     try {
-      await db.collection('users').doc(user.email).collection('despesas').doc().set({
+      await db.collection('users').doc(user.email).collection('receitas').doc().set({
         name: nome.value,
         value: valor.value,
         category: categoria.value,
         date: data.value,
         description: descricao.value
-      })
-      
-      toast.success('Despesa adicionada!', {
+      }) 
+      var floatValue = parseFloat(valor.value);
+     
+      toast.success('Receita adicionada!', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -43,9 +54,10 @@ const DespesasControl: React.FC<ReceitasProps> = ({receitas,setReceitas, despesa
         draggable: true,
         progress: undefined,
         });
-        setDespesasControll(data.value)
-        // event.reset()
-
+      setSalaryControll(salaryControll+floatValue)
+      setReceitas(salaryControll)
+      setCurrentBalance(salaryControll)
+   
     } catch (error) {
       toast.error('Ops, tente de novo!', {
         position: "top-right",
@@ -56,37 +68,21 @@ const DespesasControl: React.FC<ReceitasProps> = ({receitas,setReceitas, despesa
         draggable: true,
         progress: undefined,
         });
+
   }
 }
 
-// useEffect(() => {
-//   if (user != null) {
-//   db.collection('users').doc(user.email).collection('despesas')
-//   .get()
-//   .then((querySnapshot) => {
-//       querySnapshot.forEach((doc) => {
-//         let floatValue = parseFloat(doc.data().value);
-//         setDespesas(despesas+floatValue);
-       
-//       });
-//   })
-//   .catch((error) => {
-//       console.log("Error getting documents: ", error);
-//   });
-// }
-// setReceitas(receitas-despesas);
-// }, [despesasControll])
 
   return (
-    <DespesasContainer>
+    <ReceitasContainer>
       <div className="header-title">
-        <h1>Nova Despesa</h1>
+        <h1>Novo rendimento</h1>
         <h2>
-        Saldo atual: R$ {receitas.toLocaleString('pt-BR')}
+          Saldo atual: R$ {receitas.toLocaleString('pt-BR')}
         </h2>
       </div>
      
-      <Form onSubmit={(event) => handleAddDespesas(event)}>
+      <Form onSubmit={(event) => handleAddReceitas(event)}>
         <div className="">
           <label>
             Nome:
@@ -114,7 +110,7 @@ const DespesasControl: React.FC<ReceitasProps> = ({receitas,setReceitas, despesa
           </label>
           <label >
           <button type="submit" value="Salvar Despesa" className="button-submit" >
-            Salvar Despesa
+            Salvar Receita
           </button>
           </label>
           
@@ -124,10 +120,10 @@ const DespesasControl: React.FC<ReceitasProps> = ({receitas,setReceitas, despesa
         
       </Form>
       
-    </DespesasContainer>  
+    </ReceitasContainer>  
   
     )
 
 }
 
-export default DespesasControl
+export default ReceitasControl
